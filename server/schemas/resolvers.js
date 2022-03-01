@@ -7,29 +7,16 @@ const resolvers = {
         me: async(parent, args, context) => {
             if (context.user) {
                 const userData = await User.findOne({ _id: context.user._id })
-                    .select('-__v -password')
-                    .populate('savedBooks');
-
+                .populate('savebooks')
                 return userData;
             }
             throw new AuthenticationError('Not logged in');
-        },
-        user: async(parent, { username }) => {
-            return User.findOne({ username })
-                .select('-__v -password')
-                .populate('savedBooks');
         }
-        // book: async(parent, {username}) => {
-        //     const params = username ? { username } : {};
-        //     return Book.find(params).sort({createdAt: -1});
-        // }
     },
     Mutation: {
         addUser: async(parent, args) => {
-            console.log(args)
             const user = await User.create(args);
             const token = signToken(user);
-            console.log(token);
             return { token, user };
         },
         login: async(parent, { email, password }) => {
@@ -52,7 +39,7 @@ const resolvers = {
             if(context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addToSet: { savedBooks: [args] } },
+                    { $push: { savedBooks: args } },
                     { new: true, runValidators: true }
                   );
                   return updatedUser;
