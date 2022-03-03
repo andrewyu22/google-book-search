@@ -1,8 +1,8 @@
-# Professional Portfolio
+# Book Search
 
 ## Description
-
-My Portfolio using react.js
+A full-stack book search application using google api, we able to find books related to our search parameter.
+The application should return information on the corresponding book to display for you to save to your history when you are logged in.
 
 Repo: https://github.com/andrewyu22/google-book-search
 
